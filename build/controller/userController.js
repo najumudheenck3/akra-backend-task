@@ -41,21 +41,24 @@ exports.getAllUsers = getAllUsers;
 const findOneUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const query = req.query.q;
-        const user = yield User_1.default.find({
+        const user = yield User_1.default.findOne({
             $or: [
-                { name: { $regex: query, $options: "i" } },
-                { email: { $regex: query, $options: "i" } },
-                { phone: { $regex: query, $options: "i" } },
-                { address: { $regex: query, $options: "i" } },
-                { postalZip: { $regex: query, $options: "i" } },
-                { region: { $regex: query, $options: "i" } },
-                { country: { $regex: query, $options: "i" } },
-                { list: { $regex: query, $options: "i" } },
-                { text: { $regex: query, $options: "i" } },
-                { numberrange: { $regex: query, $options: "i" } },
-                { currency: { $regex: query, $options: "i" } },
+                { name: query },
+                { email: query },
+                { phone: query },
+                { address: query },
+                { postalZip: query },
+                { region: query },
+                { country: query },
+                { list: query },
+                { text: query },
+                { numberrange: query },
+                { currency: query },
             ],
         });
+        if (!user) {
+            return res.status(404).json('User not found');
+        }
         res.status(200).json(user);
     }
     catch (error) {
@@ -66,12 +69,16 @@ exports.findOneUser = findOneUser;
 const fuzzySearch = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const query = req.query.q;
-        const result = yield User_1.default.find({
+        const users = yield User_1.default.find({
             $or: [
-                { name: { $regex: query, $options: 'i' } },
-                { phone: { $regex: query, $options: 'i' } },
+                { name: { $regex: query, $options: "i" } },
+                { phone: { $regex: query, $options: "i" } },
             ],
         });
+        if (users.length === 0) {
+            return res.status(404).json('No users found');
+        }
+        res.status(200).json(users);
     }
     catch (error) {
         return next((0, error_1.createError)(500, "Internal server error"));

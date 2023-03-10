@@ -36,21 +36,24 @@ export const findOneUser = async (
 ) => {
   try {
     const query = req.query.q;
-    const user = await User.find({
+    const user = await User.findOne({
       $or: [
-        { name: { $regex: query, $options: "i" } },
-        { email: { $regex: query, $options: "i" } },
-        { phone: { $regex: query, $options: "i" } },
-        { address: { $regex: query, $options: "i" } },
-        { postalZip: { $regex: query, $options: "i" } },
-        { region: { $regex: query, $options: "i" } },
-        { country: { $regex: query, $options: "i" } },
-        { list: { $regex: query, $options: "i" } },
-        { text: { $regex: query, $options: "i" } },
-        { numberrange: { $regex: query, $options: "i" } },
-        { currency: { $regex: query, $options: "i" } },
+        { name: query },
+        { email: query },
+        { phone: query },
+        { address: query },
+        { postalZip: query },
+        { region: query },
+        { country: query },
+        { list: query },
+        { text: query },
+        { numberrange: query },
+        { currency: query },
       ],
     });
+    if (!user) {
+        return res.status(404).json('User not found');
+      }
     res.status(200).json(user);
   } catch (error) {
     return next(createError(500, "Internal server error"));
@@ -70,6 +73,9 @@ export const fuzzySearch = async (
         { phone: { $regex: query, $options: "i" } },
       ],
     });
+    if (users.length === 0) {
+        return res.status(404).json('No users found');
+      }
     res.status(200).json(users);
   } catch (error) {
     return next(createError(500, "Internal server error"));

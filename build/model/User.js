@@ -57,7 +57,6 @@ const UserSchema = new mongoose_1.Schema({
     },
     currency: {
         type: String,
-    }
+    },
 });
-// Export the model and return your IUser interface
 exports.default = mongoose_1.default.model("user", UserSchema);

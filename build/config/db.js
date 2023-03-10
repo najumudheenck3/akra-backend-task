@@ -10,10 +10,10 @@ if (mongooseconnect) {
 }
 mongoose_1.default.Promise = global.Promise;
 const connection = mongoose_1.default.connection;
-connection.on('connected', () => {
-    console.log('Mongodb is connected');
+connection.on("connected", () => {
+    console.log("Mongodb is connected");
 });
-connection.on('error', (err) => {
-    console.log('error in  mongodb connection', err);
+connection.on("error", (err) => {
+    console.log("error in  mongodb connection", err);
 });
 module.exports = mongoose_1.default;
